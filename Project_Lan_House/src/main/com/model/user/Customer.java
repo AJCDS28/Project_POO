@@ -8,7 +8,7 @@ public class Customer {
 	private String phoneNumber;
 	private Integer cpf;
 	Address adress;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -45,6 +45,4 @@ public class Customer {
 	public void setAdress(Address adress) {
 		this.adress = adress;
 	}
-	
-	
 }

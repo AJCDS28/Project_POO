@@ -8,7 +8,7 @@ public class Address {
 	private String state;
 	private String postalCode;
 	private String country;
-	
+
 	public String getStreet() {
 		return street;
 	}
@@ -45,5 +45,4 @@ public class Address {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
 }

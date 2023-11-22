@@ -6,9 +6,9 @@ public class Reserved {
 	private Date reserveDate;
 	private Integer computerId;
 	private Integer userCpf;
-	private Double billing; 
+	private Double billing;
 	private boolean payed;
-	
+
 	public Date getReserveDate() {
 		return reserveDate;
 	}
@@ -39,5 +39,4 @@ public class Reserved {
 	public void setPayed(boolean payed) {
 		this.payed = payed;
 	}
-	
 }

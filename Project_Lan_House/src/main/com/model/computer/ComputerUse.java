@@ -10,7 +10,7 @@ public class ComputerUse {
 	private Integer computer;
 	private Double billing;
 	private boolean payed;
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -53,6 +53,4 @@ public class ComputerUse {
 	public void setPayed(boolean payed) {
 		this.payed = payed;
 	}
-	
-	
 }

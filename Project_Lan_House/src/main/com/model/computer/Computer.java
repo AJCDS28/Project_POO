@@ -8,6 +8,7 @@ public class Computer {
 	private boolean active;
 	private boolean inUse;
 	private Date lastUse;
+
 	public int getId() {
 		return id;
 	}
@@ -38,5 +39,4 @@ public class Computer {
 	public void setLastUse(Date lastUse) {
 		this.lastUse = lastUse;
 	}
-	
 }

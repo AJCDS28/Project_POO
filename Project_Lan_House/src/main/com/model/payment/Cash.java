@@ -6,6 +6,7 @@ public class Cash {
 	private Double balance;
 	private Date lastMovement;
 	private Double receivable;
+
 	public Double getBalance() {
 		return balance;
 	}
@@ -24,5 +25,4 @@ public class Cash {
 	public void setReceivable(Double receivable) {
 		this.receivable = receivable;
 	}
-	
 }

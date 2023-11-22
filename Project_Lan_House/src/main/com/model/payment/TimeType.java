@@ -5,7 +5,7 @@ public class TimeType {
 	private float time;
 	private String description;
 	private Double value;
-	
+
 	public float getTime() {
 		return time;
 	}
@@ -24,6 +24,4 @@ public class TimeType {
 	public void setValue(Double value) {
 		this.value = value;
 	}
-	
-	
 }

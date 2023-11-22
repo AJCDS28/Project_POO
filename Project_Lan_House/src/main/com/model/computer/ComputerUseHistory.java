@@ -11,6 +11,7 @@ public class ComputerUseHistory {
 	private Double billing;
 	private boolean payed;
 	private Date finishedDate;
+
 	public int getId() {
 		return id;
 	}
@@ -59,6 +60,4 @@ public class ComputerUseHistory {
 	public void setFinishedDate(Date finishedDate) {
 		this.finishedDate = finishedDate;
 	}
-	
-	
 }
