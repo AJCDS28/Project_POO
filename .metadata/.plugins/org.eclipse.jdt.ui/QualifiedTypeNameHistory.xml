@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="main.com.model.computer.Computer"/>
+    <fullyQualifiedTypeName name="main.com.model.computer.ComputerUse"/>
+    <fullyQualifiedTypeName name="main.com.model.computer.ComputerUseHistory"/>
+    <fullyQualifiedTypeName name="main.com.model.computer.Reserved"/>
 </qualifiedTypeNameHistroy>

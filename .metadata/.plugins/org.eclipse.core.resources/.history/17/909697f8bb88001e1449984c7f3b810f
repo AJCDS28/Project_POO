@@ -1,0 +1,42 @@
+import java.util.Date;
+
+public class Reserved {
+
+	private Date reserveDate;
+	private int computerId;
+	private int userCpf;
+	private Double billing; 
+	private boolean payed;
+	
+	public Date getReserveDate() {
+		return reserveDate;
+	}
+	public void setReserveDate(Date reserveDate) {
+		this.reserveDate = reserveDate;
+	}
+	public int getComputerId() {
+		return computerId;
+	}
+	public void setComputerId(int computerId) {
+		this.computerId = computerId;
+	}
+	public int getUserCpf() {
+		return userCpf;
+	}
+	public void setUserCpf(int userCpf) {
+		this.userCpf = userCpf;
+	}
+	public Double getBilling() {
+		return billing;
+	}
+	public void setBilling(Double billing) {
+		this.billing = billing;
+	}
+	public boolean isPayed() {
+		return payed;
+	}
+	public void setPayed(boolean payed) {
+		this.payed = payed;
+	}
+	
+}

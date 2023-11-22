@@ -1,0 +1,19 @@
+
+public class Defaulter {
+
+	private int userCpg;
+	private Double amountOwed;
+	public int getUserCpg() {
+		return userCpg;
+	}
+	public void setUserCpg(int userCpg) {
+		this.userCpg = userCpg;
+	}
+	public Double getAmountOwed() {
+		return amountOwed;
+	}
+	public void setAmountOwed(Double amountOwed) {
+		this.amountOwed = amountOwed;
+	}
+	
+}
