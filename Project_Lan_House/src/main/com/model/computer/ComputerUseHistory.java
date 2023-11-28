@@ -12,6 +12,15 @@ public class ComputerUseHistory {
 	private boolean payed;
 	private Date finishedDate;
 
+	public void parse(ComputerUse computerUse) {
+		this.initialTime = computerUse.getInitialTime();
+		this.endTime = computerUse.getEndTime();
+		this.userCpf = computerUse.getUserCpf();
+		this.computerId = computerUse.getComputer();
+		this.billing = computerUse.getBilling();
+		this.payed = computerUse.isPayed();
+	}
+
 	public int getId() {
 		return id;
 	}

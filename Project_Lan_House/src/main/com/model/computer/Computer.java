@@ -4,22 +4,21 @@ import java.util.Date;
 public class Computer {
 
 	private Integer id;
-	private Integer ip;
-	private boolean active;
-	private boolean inUse;
+	private boolean active = Boolean.TRUE;
+	private boolean inUse = Boolean.FALSE;
 	private Date lastUse;
+
+	public Computer() {}
+
+	public Computer(Integer id) {
+		this.id = id;
+	}
 
 	public int getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	public Integer getIp() {
-		return ip;
-	}
-	public void setIp(Integer ip) {
-		this.ip = ip;
 	}
 	public boolean isActive() {
 		return active;
