@@ -1,8 +1,11 @@
 package EntradaSaida;
 
 import java.text.DecimalFormat;
+import java.util.Collection;
 
 import javax.swing.JOptionPane;
+
+import main.com.model.computer.Computer;
 
 public class EntradaSaida {
     public static final Integer NUMBER_OF_OPTIONS = 12;
@@ -70,5 +73,15 @@ public class EntradaSaida {
 
 	public static void showMessage(String msg) {
 		JOptionPane.showMessageDialog(null, msg);
+	}
+
+	public static void listFreeComputers(Collection<Computer> computers) {
+		StringBuilder str = new StringBuilder("Computadores Livres\n");
+		for (Computer pc : computers) {
+			if (!pc.isInUse()) {
+				str.append("\nComputador: ").append(pc.getId());
+			}
+		}
+		showMessage(str.toString());
 	}
 }

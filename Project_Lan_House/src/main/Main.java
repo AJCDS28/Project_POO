@@ -44,16 +44,22 @@ public class Main {
 						EntradaSaida.showMessage("Usuário está devendo, infelizmente não será possível alocar até que pague o valor de R$ " + defaulte.toString());
 						break;
 					}
-					computerService.locateComputer(customer, timeType);
+					computerService.locateComputer(customer, timeType, paymentService);
 					break;
 
 				case 4:
+					computerService.deslocateComputer(userService, paymentService);
 					break;
 
 				case 5:
+					Customer user = userService.validateUser();
+					if (user != null) {
+						paymentService.receivePayment(user, EntradaSaida.getDouble("Valor a ser recebido"));
+					}
 					break;
 
 				case 6:
+					computerService.listFreeComputer();
 					break;
 
 				case 7:

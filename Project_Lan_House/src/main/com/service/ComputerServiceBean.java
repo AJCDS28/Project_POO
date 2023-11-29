@@ -28,7 +28,7 @@ public class ComputerServiceBean {
         }
     }
 
-    public void locateComputer(Customer user, TimeType timeType) {
+    public void locateComputer(Customer user, TimeType timeType, PaymentServiceBean paymentService) {
         Boolean isPayed = EntradaSaida.getBoolean("Já está pago?");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, Math.round(timeType.getTime() * 60));
@@ -47,6 +47,7 @@ public class ComputerServiceBean {
 
         computer.setInUse(true);
         computer.setLastUse(new Date());
+        computerMap.put(computer.getId(), computer);
 
         ComputerUse computerUse = new ComputerUse();
         computerUse.setId(computerUseMap.keySet().size() + 1);
@@ -57,8 +58,47 @@ public class ComputerServiceBean {
         computerUse.setBilling(timeType.getValue());
         computerUse.setPayed(isPayed);
 
+        if (isPayed) paymentService.receivePayment(user, timeType.getValue());
+
         this.addComputerUse(computerUse);
         this.addComputerUseHistory(computerUse);
+    }
+
+    public void deslocateComputer(UserServiceBean userService, PaymentServiceBean paymentService) {
+        if (computerUseMap.keySet().isEmpty()) {
+            EntradaSaida.showMessage("Nenhum computador em uso");
+            return;
+        }
+        Integer computerId = EntradaSaida.getNumber("Informe o número do computador a ser desalocado");
+        ComputerUse computerInUse = null;
+        for (ComputerUse pc : computerUseMap.values()) {
+            if (pc.getComputer().equals(computerId)) {
+                computerInUse = pc;
+                break;
+            }
+        }
+        if (computerInUse == null) {
+            EntradaSaida.showMessage("Computador não encontrado");
+            return;
+        }
+
+        Customer user = userService.getUser(computerInUse.getUserCpf());
+        if (!computerInUse.isPayed()) {
+            if (EntradaSaida.getBoolean("O usuário já irá pagar?")) {
+                computerInUse.setPayed(true);
+                paymentService.receivePayment(user, computerInUse.getBilling());
+
+                this.attComputerUseHistory(user);
+            } else {
+                paymentService.addDefaulter(user, computerInUse.getBilling());
+            }
+        }
+        computerUseMap.remove(computerInUse.getId());
+
+        Computer computer = computerMap.get(computerId);
+        computer.setInUse(false);
+        computer.setLastUse(new Date());
+        computerMap.put(computer.getId(), computer);
     }
 
     public void addComputerUseHistory(ComputerUse computerUse) {
@@ -66,6 +106,26 @@ public class ComputerServiceBean {
         pc.parse(computerUse);
         pc.setId(computerUseHistoryMap.keySet().size() + 1);
         computerUseHistoryMap.put(pc.getId(), pc);
+    }
+
+    public void attComputerUseHistory(Customer user) {
+        ComputerUseHistory computerUseHistory = null;
+        for (ComputerUseHistory pc : computerUseHistoryMap.values()) {
+            if (!pc.isPayed() && pc.getUserCpf().equals(user.getCpf())) {
+                computerUseHistory = pc;
+                computerUseHistory.setPayed(true);
+                break;
+            }
+        }
+        computerUseHistoryMap.put(computerUseHistory.getId(), computerUseHistory);
+    }
+
+    public void listFreeComputer() {
+        if (isAllUsed()) {
+            EntradaSaida.showMessage("Todos os computadores estão ocupados");
+        } else {
+            EntradaSaida.listFreeComputers(computerMap.values());
+        }
     }
 
     public Boolean isAllUsed() {

@@ -53,6 +53,19 @@ public class UserServiceBean {
         return this.getUser(cpf);
     }
 
+    public Customer validateUser() {
+        if (isUsersEmpty()) {
+            EntradaSaida.showMessage("Não há nenhum cliente cadastrado");
+            return null;
+        }
+
+        Customer user = userMap.get(EntradaSaida.getNumber("Digite o CPF do cliente"));
+        if (user == null) {
+            EntradaSaida.showMessage("Cliente não encontrado");
+        }
+        return user;
+    }
+
     public Boolean isUsersEmpty() {
         return userMap.entrySet().isEmpty();
     }

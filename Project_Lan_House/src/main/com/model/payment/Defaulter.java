@@ -3,7 +3,7 @@ package main.com.model.payment;
 public class Defaulter {
 
 	private Integer userCpf;
-	private Double amountOwed;
+	private Double amountOwed = 0.00d;
 
 	public Integer getUserCpf() {
 		return userCpf;

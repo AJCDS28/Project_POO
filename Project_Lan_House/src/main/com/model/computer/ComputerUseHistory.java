@@ -3,11 +3,11 @@ import java.util.Date;
 
 public class ComputerUseHistory {
 
-	private int id;
+	private Integer id;
 	private Date initialTime;
 	private Date endTime;
-	private int userCpf;
-	private int computerId;
+	private Integer userCpf;
+	private Integer computerId;
 	private Double billing;
 	private boolean payed;
 	private Date finishedDate;
@@ -21,7 +21,7 @@ public class ComputerUseHistory {
 		this.payed = computerUse.isPayed();
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 	public void setId(int id) {
@@ -39,13 +39,13 @@ public class ComputerUseHistory {
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-	public int getUserCpf() {
+	public Integer getUserCpf() {
 		return userCpf;
 	}
 	public void setUserCpf(int userCpf) {
 		this.userCpf = userCpf;
 	}
-	public int getComputerId() {
+	public Integer getComputerId() {
 		return computerId;
 	}
 	public void setComputerId(int computerId) {
