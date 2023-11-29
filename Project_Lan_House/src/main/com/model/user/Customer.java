@@ -1,13 +1,12 @@
 package main.com.model.user;
 
-public class Customer {
+public class Customer extends Address {
 
 	private String name;
 	private String shortname;
 	private String emailAdress;
 	private String phoneNumber;
-	private Integer cpf;
-	Address adress;
+	private String cpf;
 
 	public String getName() {
 		return name;
@@ -33,16 +32,10 @@ public class Customer {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public Integer getCpf() {
+	public String getCpf() {
 		return cpf;
 	}
-	public void setCpf(Integer cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
-	}
-	public Address getAdress() {
-		return adress;
-	}
-	public void setAdress(Address adress) {
-		this.adress = adress;
 	}
 }

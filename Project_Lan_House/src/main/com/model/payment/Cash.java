@@ -3,9 +3,9 @@ import java.util.Date;
 
 public class Cash {
 
-	private Double balance;
-	private Date lastMovement;
-	private Double receivable;
+	private Double balance = 0.00d;
+	private Date lastMovement = new Date();
+	private Double receivable = 0.00d;
 
 	public Double getBalance() {
 		return balance;

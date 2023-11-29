@@ -13,20 +13,20 @@ import main.com.model.user.Employee;
 public class UserServiceBean {
     private List<Employee> employeeList = new ArrayList<Employee>();
     private Employee employee;
-    private Map<Integer, Customer> userMap = new HashMap<Integer, Customer>();
+    private Map<String, Customer> userMap = new HashMap<String, Customer>();
 
     public Customer createNewUser() {
         return createNewUser(null);
     }
 
-    public Customer createNewUser(Integer cpf) {
+    public Customer createNewUser(String cpf) {
         Boolean isFullUser = EntradaSaida.getBoolean("Deseja realizar o cadastro completo?");
 
         Customer user = new Customer();
         user.setName(EntradaSaida.getText("Nome"));
-        user.setShortname(EntradaSaida.getText("Apelido"));
-        user.setCpf(cpf != null ? cpf : EntradaSaida.getNumber("CPF"));
-        user.setEmailAdress(EntradaSaida.getText("Email"));
+        if (isFullUser)  user.setShortname(EntradaSaida.getText("Apelido"));
+        user.setCpf(cpf != null ? cpf : EntradaSaida.getCpf("CPF"));
+        if (isFullUser) user.setEmailAdress(EntradaSaida.getText("Email"));
         user.setPhoneNumber(EntradaSaida.getText("Telefone"));
 
         if (isFullUser) {
@@ -49,7 +49,7 @@ public class UserServiceBean {
             else return null;
         }
 
-        Integer cpf = EntradaSaida.getNumber("Digite o CPF do cliente");
+        String cpf = EntradaSaida.getCpf("Digite o CPF do cliente");
         return this.getUser(cpf);
     }
 
@@ -59,7 +59,7 @@ public class UserServiceBean {
             return null;
         }
 
-        Customer user = userMap.get(EntradaSaida.getNumber("Digite o CPF do cliente"));
+        Customer user = userMap.get(EntradaSaida.getCpf("Digite o CPF do cliente"));
         if (user == null) {
             EntradaSaida.showMessage("Cliente não encontrado");
         }
@@ -70,7 +70,7 @@ public class UserServiceBean {
         return userMap.entrySet().isEmpty();
     }
 
-    public Customer getUser(Integer cpf) {
+    public Customer getUser(String cpf) {
         if (userMap.get(cpf) != null) return userMap.get(cpf);
 
         if (EntradaSaida.getBoolean("Cliente não encontrado, deseja criar esse cliente?")) {

@@ -2,13 +2,13 @@ package main.com.model.payment;
 
 public class Defaulter {
 
-	private Integer userCpf;
+	private String userCpf;
 	private Double amountOwed = 0.00d;
 
-	public Integer getUserCpf() {
+	public String getUserCpf() {
 		return userCpf;
 	}
-	public void setUserCpf(Integer userCpf) {
+	public void setUserCpf(String userCpf) {
 		this.userCpf = userCpf;
 	}
 	public Double getAmountOwed() {

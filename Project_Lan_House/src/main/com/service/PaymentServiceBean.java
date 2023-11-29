@@ -10,7 +10,7 @@ import main.com.model.payment.Defaulter;
 import main.com.model.user.Customer;
 
 public class PaymentServiceBean {
-    private Map<Integer, Defaulter> defaulterMap = new HashMap<Integer, Defaulter>();
+    private Map<String, Defaulter> defaulterMap = new HashMap<String, Defaulter>();
     private Cash cash = new Cash();
 
     public Double isDefaulter(Customer user) {
@@ -24,6 +24,7 @@ public class PaymentServiceBean {
         Defaulter defaulter = defaulterMap.get(user.getCpf());
         if (defaulterMap.get(user.getCpf()) != null) {
             defaulter.setAmountOwed(defaulter.getAmountOwed() - value);
+            this.decreaseReceivable(value);
 
             if (defaulter.getAmountOwed() > 0.00d) {
                 EntradaSaida.showMessage("Cliente ainda deve R$ " + defaulter.getAmountOwed());
@@ -36,7 +37,7 @@ public class PaymentServiceBean {
         this.increaseBalance(value);
     }
 
-    public Defaulter getDefaulter(Integer cpf) {
+    public Defaulter getDefaulter(Long cpf) {
         return defaulterMap.get(cpf);
     }
 
@@ -51,6 +52,10 @@ public class PaymentServiceBean {
     public void addDefaulter(Defaulter defaulter) {
         defaulterMap.put(defaulter.getUserCpf(), defaulter);
         this.increaseReceivable(defaulter.getAmountOwed());
+    }
+
+    public void printCash() {
+        EntradaSaida.printCash(cash);
     }
 
     public void increaseBalance(Double value) {

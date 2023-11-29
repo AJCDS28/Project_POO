@@ -6,7 +6,7 @@ public class ComputerUseHistory {
 	private Integer id;
 	private Date initialTime;
 	private Date endTime;
-	private Integer userCpf;
+	private String userCpf;
 	private Integer computerId;
 	private Double billing;
 	private boolean payed;
@@ -39,10 +39,10 @@ public class ComputerUseHistory {
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-	public Integer getUserCpf() {
+	public String getUserCpf() {
 		return userCpf;
 	}
-	public void setUserCpf(int userCpf) {
+	public void setUserCpf(String userCpf) {
 		this.userCpf = userCpf;
 	}
 	public Integer getComputerId() {

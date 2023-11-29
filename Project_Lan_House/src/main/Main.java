@@ -1,5 +1,8 @@
 package main;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import EntradaSaida.EntradaSaida;
 import main.com.model.payment.TimeType;
 import main.com.model.user.Customer;
@@ -17,6 +20,17 @@ public class Main {
 		ComputerServiceBean computerService = new ComputerServiceBean();
 
 		computerService.initializeComputers(EntradaSaida.getNumber("Quantos computadores a Lan House terá?"));
+
+		TimerTask minuteSchedule = new TimerTask() {
+            @Override
+            public void run() {
+				System.out.println("Verificação Minute Schedule");
+                computerService.verifyScheduled(userService, paymentService);
+            }
+        };
+
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(minuteSchedule, 0, 60 * 1000);
 
 		Integer option = 0;
 		while(option != EntradaSaida.NUMBER_OF_OPTIONS) {
@@ -63,12 +77,15 @@ public class Main {
 					break;
 
 				case 7:
+					computerService.listOccupiedComputers();
 					break;
 
-				case 8:
-					break;
+				// case 8:
+				// 	computerService.listReserveds();
+				// 	break;
 
 				case 9:
+					paymentService.printCash();
 					break;
 
 				case 10:

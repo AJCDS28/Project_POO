@@ -1,18 +1,21 @@
 package EntradaSaida;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 
 import javax.swing.JOptionPane;
 
 import main.com.model.computer.Computer;
+import main.com.model.computer.ComputerUse;
+import main.com.model.payment.Cash;
 
 public class EntradaSaida {
     public static final Integer NUMBER_OF_OPTIONS = 12;
 
     public static Integer mainScreen() {
         StringBuilder menu = new StringBuilder();
-        menu.append("// TELA DE MENU '\\'\n\n");
+        menu.append(" TELA DE MENU \n\n");
         menu.append("↓ Selecione uma das opções abaixo ↓\n\n");
         menu.append("1: Cadastrar novo cliente\n");
         menu.append("2: Cadastrar opção de tempo\n");
@@ -20,8 +23,9 @@ public class EntradaSaida {
         menu.append("4: Deslocar um computador\n");
         menu.append("5: Receber pagamento\n");
         menu.append("6: Lista de computadores livres\n");
-        menu.append("7: Fazer reserva\n");
-        menu.append("8: Lista de reservas\n");
+		menu.append("7: Lista de computadores ocupados\n");
+        // menu.append("7: Fazer reserva\n");
+        // menu.append("8: Lista de reservas\n");
         menu.append("9: Conferência de caixa\n");
         menu.append("10: Lista de inadimplentes\n");
         menu.append("11: Relatório de histórico de uso\n");
@@ -38,12 +42,25 @@ public class EntradaSaida {
 		while(true) {
 			try {
 				Integer number = Integer.parseInt(JOptionPane.showInputDialog(msg));
+				if (number <= 0) throw new Exception();
 				return number;
 			} catch (Exception e) {
 				showMessage("Input invalido");
 			}
 		}
 	}
+
+	// public static Integer getPositiveNumber(String msg) {
+	// 	while(true) {
+	// 		try {
+	// 			Integer number = Integer.parseInt(JOptionPane.showInputDialog(msg));
+	// 			if (number <= 0) throw new Exception();
+	// 			return number;
+	// 		} catch (Exception e) {
+	// 			showMessage("Input invalido");
+	// 		}
+	// 	}
+	// }
 
     public static Boolean getBoolean(String msg) {
         return JOptionPane.showConfirmDialog(null, msg, "Question", 0) == 0;
@@ -52,8 +69,8 @@ public class EntradaSaida {
 	public static Double getDouble(String msg) {
 		while(true) {
 			try {
-				Double number = Double.parseDouble(JOptionPane.showInputDialog(msg));
-				return Double.parseDouble(new DecimalFormat("#,##0.00").format(number));
+				// Double number = Double.parseDouble(JOptionPane.showInputDialog(msg));
+				return new DecimalFormat("#,##0.00").parse(JOptionPane.showInputDialog(msg)).doubleValue();
 			} catch (Exception e) {
 				showMessage("Input invalido");
 			}
@@ -63,8 +80,8 @@ public class EntradaSaida {
     public static Float getFloat(String msg) {
 		while(true) {
 			try {
-				Float number = Float.parseFloat(JOptionPane.showInputDialog(msg));
-				return Float.parseFloat(new DecimalFormat("#,##0.0").format(number));
+				// Float number = Float.parseFloat(JOptionPane.showInputDialog(msg));
+				return new DecimalFormat("#,##0.0").parse(JOptionPane.showInputDialog(msg)).floatValue();
 			} catch (Exception e) {
 				showMessage("Input invalido");
 			}
@@ -82,6 +99,46 @@ public class EntradaSaida {
 				str.append("\nComputador: ").append(pc.getId());
 			}
 		}
+		showMessage(str.toString());
+	}
+
+	public static void listOccupiedComputers(Collection<ComputerUse> computers) {
+		StringBuilder str = new StringBuilder("Computadores Livres\n");
+		for (ComputerUse pc : computers) {
+			str.append("\nComputador: ").append(pc.getId());
+			str.append(" Ocupado pelo usuário ").append(pc.getUserCpf());
+		}
+		showMessage(str.toString());
+	}
+
+	public static String getCpf(String msg) {
+		while(true) {
+			try {
+				String cpf = getText(msg);
+				if (cpf.length() != 11) throw new Exception();
+				return cpf;
+			} catch (Exception e) {
+				showMessage("Input invalido");
+			}
+		}
+	}
+
+	// public static void listReserveds(Collection<Reserved> reserveds) {
+	// 	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+	// 	StringBuilder str = new StringBuilder("Reservas Agendadas\n");
+	// 	for (Reserved reserve : reserveds) {
+	// 		str.append("\nReserva para usuário ").append(reserve.getUserCpf()).append(" na data ").append(dateFormat.format(reserve.getReserveDate()));
+	// 	}
+	// 	showMessage(str.toString());
+	// }
+
+	public static void printCash(Cash cash) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		StringBuilder str = new StringBuilder("Conferência de Caixa\n");
+		str.append("\nSaldo: R$ ").append(cash.getBalance());
+		str.append("\nO que tem para receber: R$ ").append(cash.getReceivable());
+		str.append("\nUltima movimentação: ").append(dateFormat.format(cash.getLastMovement()));
+
 		showMessage(str.toString());
 	}
 }

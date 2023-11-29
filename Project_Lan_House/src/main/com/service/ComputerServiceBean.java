@@ -8,7 +8,6 @@ import EntradaSaida.EntradaSaida;
 import main.com.model.computer.Computer;
 import main.com.model.computer.ComputerUse;
 import main.com.model.computer.ComputerUseHistory;
-import main.com.model.computer.Reserved;
 import main.com.model.payment.TimeType;
 import main.com.model.user.Customer;
 
@@ -20,7 +19,7 @@ public class ComputerServiceBean {
 
 	HashMap<Integer, ComputerUseHistory> computerUseHistoryMap = new HashMap<Integer, ComputerUseHistory>();
 
-	HashMap<Integer, Reserved> reservedMap = new HashMap<Integer, Reserved>();
+	// HashMap<Integer, Reserved> reservedMap = new HashMap<Integer, Reserved>();
 
     public void initializeComputers(Integer quantity) {
         for (int i = 1; i <= quantity; i++) {
@@ -34,14 +33,16 @@ public class ComputerServiceBean {
         calendar.add(Calendar.MINUTE, Math.round(timeType.getTime() * 60));
         Computer computer = null;
         for (Computer pc : computerMap.values()) {
-            if (!pc.isInUse() && reservedMap.get(pc.getId()).getReserveDate().before(calendar.getTime())) {
+            if (!pc.isInUse())// && reservedMap.get(pc.getId()).getReserveDate().before(calendar.getTime()))
+            {
                 computer = computerMap.get(pc.getId());
                 break;
             }
         }
 
         if (computer == null) {
-            EntradaSaida.showMessage("Todos os computadores estão reservados, tente novamente mais tarde ou pegue um tempo menor");
+            //EntradaSaida.showMessage("Todos os computadores estão reservados, tente novamente mais tarde ou pegue um tempo menor");
+            EntradaSaida.showMessage("Ocorreu um erro, tente novamente mais tarde...");
             return;
         }
 
@@ -88,11 +89,11 @@ public class ComputerServiceBean {
                 computerInUse.setPayed(true);
                 paymentService.receivePayment(user, computerInUse.getBilling());
 
-                this.attComputerUseHistory(user);
             } else {
                 paymentService.addDefaulter(user, computerInUse.getBilling());
             }
         }
+        this.attComputerUseHistory(user, computerInUse.isPayed());
         computerUseMap.remove(computerInUse.getId());
 
         Computer computer = computerMap.get(computerId);
@@ -108,12 +109,13 @@ public class ComputerServiceBean {
         computerUseHistoryMap.put(pc.getId(), pc);
     }
 
-    public void attComputerUseHistory(Customer user) {
+    public void attComputerUseHistory(Customer user, Boolean isPayed) {
         ComputerUseHistory computerUseHistory = null;
         for (ComputerUseHistory pc : computerUseHistoryMap.values()) {
             if (!pc.isPayed() && pc.getUserCpf().equals(user.getCpf())) {
                 computerUseHistory = pc;
-                computerUseHistory.setPayed(true);
+                computerUseHistory.setPayed(isPayed);
+                computerUseHistory.setFinishedDate(new Date());
                 break;
             }
         }
@@ -127,6 +129,47 @@ public class ComputerServiceBean {
             EntradaSaida.listFreeComputers(computerMap.values());
         }
     }
+
+    public void listOccupiedComputers() {
+        if (computerUseMap.keySet().isEmpty()) {
+            EntradaSaida.showMessage("Não há nenhum computador ocupado");
+        } else {
+            EntradaSaida.listOccupiedComputers(computerUseMap.values());
+        }
+    }
+
+    public void verifyScheduled(UserServiceBean userService, PaymentServiceBean paymentService) {
+        Date now = new Date();
+        for (ComputerUse pc : computerUseMap.values()) {
+            if (pc.getEndTime().before(now)) {
+                silentDeslocateComputer(pc, userService, paymentService);
+            }
+        }
+    }
+
+    public void silentDeslocateComputer(ComputerUse computerInUse, UserServiceBean userService, PaymentServiceBean paymentService) {
+        if (computerUseMap.keySet().isEmpty()) return;
+
+        Customer user = userService.getUser(computerInUse.getUserCpf());
+        if (!computerInUse.isPayed()) {
+            paymentService.addDefaulter(user, computerInUse.getBilling());
+        }
+        this.attComputerUseHistory(user, computerInUse.isPayed());
+        computerUseMap.remove(computerInUse.getId());
+
+        Computer computer = computerMap.get(computerInUse.getComputer());
+        computer.setInUse(false);
+        computer.setLastUse(new Date());
+        computerMap.put(computer.getId(), computer);
+    }
+
+    // public void listReserveds() {
+    //     if (reservedMap.keySet().isEmpty()) {
+    //         EntradaSaida.showMessage("Não há nenhuma reserva");
+    //     } else {
+    //         EntradaSaida.listReserveds(reservedMap.values());
+    //     }
+    // }
 
     public Boolean isAllUsed() {
         return computerMap.keySet().equals(computerUseMap.keySet());
@@ -156,11 +199,11 @@ public class ComputerServiceBean {
         computerUseHistoryMap.put(computerUseHistory.getId(), computerUseHistory);
     }
 
-	public Reserved getReserved(Integer computerId) {
-        return reservedMap.get(computerId);
-    }
+	// public Reserved getReserved(Integer computerId) {
+    //     return reservedMap.get(computerId);
+    // }
 
-    public void addReserved(Reserved reserved) {
-        reservedMap.put(reserved.getComputerId(), reserved);
-    }
+    // public void addReserved(Reserved reserved) {
+    //     reservedMap.put(reserved.getComputerId(), reserved);
+    // }
 }
