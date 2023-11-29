@@ -6,18 +6,21 @@ import java.util.TimerTask;
 import EntradaSaida.EntradaSaida;
 import main.com.model.payment.TimeType;
 import main.com.model.user.Customer;
+import main.com.service.ComputerService;
 import main.com.service.ComputerServiceBean;
+import main.com.service.PaymentService;
 import main.com.service.PaymentServiceBean;
 import main.com.service.TimeTypes;
+import main.com.service.UserService;
 import main.com.service.UserServiceBean;
 
 public class Main {
 
 	public static void main(String[] args) {
 		TimeTypes timeTypes = new TimeTypes();
-		UserServiceBean userService = new UserServiceBean();
-		PaymentServiceBean paymentService = new PaymentServiceBean();
-		ComputerServiceBean computerService = new ComputerServiceBean();
+		UserService userService = new UserServiceBean();
+		PaymentService paymentService = new PaymentServiceBean();
+		ComputerService computerService = new ComputerServiceBean();
 
 		computerService.initializeComputers(EntradaSaida.getNumber("Quantos computadores a Lan House terá?"));
 
@@ -80,21 +83,17 @@ public class Main {
 					computerService.listOccupiedComputers();
 					break;
 
-				// case 8:
-				// 	computerService.listReserveds();
-				// 	break;
+				case 8:
+					paymentService.printCash();
+					break;
 
 				case 9:
-					paymentService.printCash();
 					break;
 
 				case 10:
 					break;
 
 				case 11:
-					break;
-
-				case 12:
 					break;
 
 				default:

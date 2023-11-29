@@ -1,31 +1,33 @@
 package main.com.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import EntradaSaida.EntradaSaida;
 import main.com.model.user.Address;
 import main.com.model.user.Customer;
-import main.com.model.user.Employee;
 
-public class UserServiceBean {
-    private List<Employee> employeeList = new ArrayList<Employee>();
-    private Employee employee;
+public class UserServiceBean implements UserService {
     private Map<String, Customer> userMap = new HashMap<String, Customer>();
 
+    @Override
     public Customer createNewUser() {
         return createNewUser(null);
     }
 
-    public Customer createNewUser(String cpf) {
+    private Customer createNewUser(String cpf) {
         Boolean isFullUser = EntradaSaida.getBoolean("Deseja realizar o cadastro completo?");
 
         Customer user = new Customer();
+        user.setCpf(cpf != null ? cpf : EntradaSaida.getCpf("CPF"));
+
+        if (userMap.get(user.getCpf()) != null) {
+            EntradaSaida.showMessage("Cliente já cadastrado");
+            return null;
+        }
+
         user.setName(EntradaSaida.getText("Nome"));
         if (isFullUser)  user.setShortname(EntradaSaida.getText("Apelido"));
-        user.setCpf(cpf != null ? cpf : EntradaSaida.getCpf("CPF"));
         if (isFullUser) user.setEmailAdress(EntradaSaida.getText("Email"));
         user.setPhoneNumber(EntradaSaida.getText("Telefone"));
 
@@ -43,6 +45,7 @@ public class UserServiceBean {
         return user;
     }
 
+    @Override
     public Customer findUser() {
         if (this.isUsersEmpty()) {
             if (EntradaSaida.getBoolean("Não há nenhum cliente, deseja criar um?")) return this.createNewUser();
@@ -53,6 +56,7 @@ public class UserServiceBean {
         return this.getUser(cpf);
     }
 
+    @Override
     public Customer validateUser() {
         if (isUsersEmpty()) {
             EntradaSaida.showMessage("Não há nenhum cliente cadastrado");
@@ -66,10 +70,7 @@ public class UserServiceBean {
         return user;
     }
 
-    public Boolean isUsersEmpty() {
-        return userMap.entrySet().isEmpty();
-    }
-
+    @Override
     public Customer getUser(String cpf) {
         if (userMap.get(cpf) != null) return userMap.get(cpf);
 
@@ -80,19 +81,11 @@ public class UserServiceBean {
         return null;
     }
 
-    public void addUser(Customer user) {
+    private Boolean isUsersEmpty() {
+        return userMap.entrySet().isEmpty();
+    }
+
+    private void addUser(Customer user) {
         userMap.put(user.getCpf(), user);
-    }
-
-    public void addEmployee(Employee employee) {
-        employeeList.add(employee);
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
     }
 }

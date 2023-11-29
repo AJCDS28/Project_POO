@@ -11,7 +11,7 @@ import main.com.model.computer.ComputerUseHistory;
 import main.com.model.payment.TimeType;
 import main.com.model.user.Customer;
 
-public class ComputerServiceBean {
+public class ComputerServiceBean implements ComputerService {
 
 	HashMap<Integer, Computer> computerMap = new HashMap<Integer, Computer>();
 
@@ -19,29 +19,27 @@ public class ComputerServiceBean {
 
 	HashMap<Integer, ComputerUseHistory> computerUseHistoryMap = new HashMap<Integer, ComputerUseHistory>();
 
-	// HashMap<Integer, Reserved> reservedMap = new HashMap<Integer, Reserved>();
-
+    @Override
     public void initializeComputers(Integer quantity) {
         for (int i = 1; i <= quantity; i++) {
             addComputer(new Computer(i));
         }
     }
 
-    public void locateComputer(Customer user, TimeType timeType, PaymentServiceBean paymentService) {
+    @Override
+    public void locateComputer(Customer user, TimeType timeType, PaymentService paymentService) {
         Boolean isPayed = EntradaSaida.getBoolean("Já está pago?");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, Math.round(timeType.getTime() * 60));
         Computer computer = null;
         for (Computer pc : computerMap.values()) {
-            if (!pc.isInUse())// && reservedMap.get(pc.getId()).getReserveDate().before(calendar.getTime()))
-            {
+            if (!pc.isInUse()) {
                 computer = computerMap.get(pc.getId());
                 break;
             }
         }
 
         if (computer == null) {
-            //EntradaSaida.showMessage("Todos os computadores estão reservados, tente novamente mais tarde ou pegue um tempo menor");
             EntradaSaida.showMessage("Ocorreu um erro, tente novamente mais tarde...");
             return;
         }
@@ -65,7 +63,8 @@ public class ComputerServiceBean {
         this.addComputerUseHistory(computerUse);
     }
 
-    public void deslocateComputer(UserServiceBean userService, PaymentServiceBean paymentService) {
+    @Override
+    public void deslocateComputer(UserService userService, PaymentService paymentService) {
         if (computerUseMap.keySet().isEmpty()) {
             EntradaSaida.showMessage("Nenhum computador em uso");
             return;
@@ -102,26 +101,7 @@ public class ComputerServiceBean {
         computerMap.put(computer.getId(), computer);
     }
 
-    public void addComputerUseHistory(ComputerUse computerUse) {
-        ComputerUseHistory pc = new ComputerUseHistory();
-        pc.parse(computerUse);
-        pc.setId(computerUseHistoryMap.keySet().size() + 1);
-        computerUseHistoryMap.put(pc.getId(), pc);
-    }
-
-    public void attComputerUseHistory(Customer user, Boolean isPayed) {
-        ComputerUseHistory computerUseHistory = null;
-        for (ComputerUseHistory pc : computerUseHistoryMap.values()) {
-            if (!pc.isPayed() && pc.getUserCpf().equals(user.getCpf())) {
-                computerUseHistory = pc;
-                computerUseHistory.setPayed(isPayed);
-                computerUseHistory.setFinishedDate(new Date());
-                break;
-            }
-        }
-        computerUseHistoryMap.put(computerUseHistory.getId(), computerUseHistory);
-    }
-
+    @Override
     public void listFreeComputer() {
         if (isAllUsed()) {
             EntradaSaida.showMessage("Todos os computadores estão ocupados");
@@ -130,6 +110,7 @@ public class ComputerServiceBean {
         }
     }
 
+    @Override
     public void listOccupiedComputers() {
         if (computerUseMap.keySet().isEmpty()) {
             EntradaSaida.showMessage("Não há nenhum computador ocupado");
@@ -138,7 +119,8 @@ public class ComputerServiceBean {
         }
     }
 
-    public void verifyScheduled(UserServiceBean userService, PaymentServiceBean paymentService) {
+    @Override
+    public void verifyScheduled(UserService userService, PaymentService paymentService) {
         Date now = new Date();
         for (ComputerUse pc : computerUseMap.values()) {
             if (pc.getEndTime().before(now)) {
@@ -147,7 +129,7 @@ public class ComputerServiceBean {
         }
     }
 
-    public void silentDeslocateComputer(ComputerUse computerInUse, UserServiceBean userService, PaymentServiceBean paymentService) {
+    private void silentDeslocateComputer(ComputerUse computerInUse, UserService userService, PaymentService paymentService) {
         if (computerUseMap.keySet().isEmpty()) return;
 
         Customer user = userService.getUser(computerInUse.getUserCpf());
@@ -163,47 +145,40 @@ public class ComputerServiceBean {
         computerMap.put(computer.getId(), computer);
     }
 
-    // public void listReserveds() {
-    //     if (reservedMap.keySet().isEmpty()) {
-    //         EntradaSaida.showMessage("Não há nenhuma reserva");
-    //     } else {
-    //         EntradaSaida.listReserveds(reservedMap.values());
-    //     }
-    // }
-
+    @Override
     public Boolean isAllUsed() {
         return computerMap.keySet().equals(computerUseMap.keySet());
     }
 
-	public Computer getComputer(Integer id) {
-        return computerMap.get(id);
+    private void attComputerUseHistory(Customer user, Boolean isPayed) {
+        ComputerUseHistory computerUseHistory = null;
+        for (ComputerUseHistory pc : computerUseHistoryMap.values()) {
+            if (!pc.isPayed() && pc.getUserCpf().equals(user.getCpf())) {
+                computerUseHistory = pc;
+                computerUseHistory.setPayed(isPayed);
+                computerUseHistory.setFinishedDate(new Date());
+                break;
+            }
+        }
+        this.addComputerUseHistory(computerUseHistory);
     }
 
-    public void addComputer(Computer computer) {
+    private void addComputerUseHistory(ComputerUse computerUse) {
+        ComputerUseHistory pc = new ComputerUseHistory();
+        pc.parse(computerUse);
+        pc.setId(computerUseHistoryMap.keySet().size() + 1);
+        computerUseHistoryMap.put(pc.getId(), pc);
+    }
+
+    private void addComputer(Computer computer) {
         computerMap.put(computer.getId(), computer);
     }
 
-	public ComputerUse getComputerUse(Integer id) {
-        return computerUseMap.get(id);
-    }
-
-    public void addComputerUse(ComputerUse computerUse) {
+    private void addComputerUse(ComputerUse computerUse) {
         computerUseMap.put(computerUse.getId(), computerUse);
     }
 
-	public ComputerUseHistory getComputerUseHistory(Integer id) {
-        return computerUseHistoryMap.get(id);
-    }
-
-    public void addComputerUseHistory(ComputerUseHistory computerUseHistory) {
+    private void addComputerUseHistory(ComputerUseHistory computerUseHistory) {
         computerUseHistoryMap.put(computerUseHistory.getId(), computerUseHistory);
     }
-
-	// public Reserved getReserved(Integer computerId) {
-    //     return reservedMap.get(computerId);
-    // }
-
-    // public void addReserved(Reserved reserved) {
-    //     reservedMap.put(reserved.getComputerId(), reserved);
-    // }
 }

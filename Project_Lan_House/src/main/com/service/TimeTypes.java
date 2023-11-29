@@ -17,7 +17,7 @@ public class TimeTypes {
         TimeType timeType = new TimeType();
         timeType.setTime(time != null ? time : EntradaSaida.getFloat("Insira o tempo em horas"));
         timeType.setValue(EntradaSaida.getDouble("Insira o valor"));
-        timeType.setDescription("Insira a descrição desse tempo");
+        timeType.setDescription(EntradaSaida.getText("Insira a descrição desse tempo"));
 
         this.addTimeType(timeType);
         return timeType;

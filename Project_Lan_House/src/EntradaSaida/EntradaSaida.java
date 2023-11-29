@@ -11,7 +11,7 @@ import main.com.model.computer.ComputerUse;
 import main.com.model.payment.Cash;
 
 public class EntradaSaida {
-    public static final Integer NUMBER_OF_OPTIONS = 12;
+    public static final Integer NUMBER_OF_OPTIONS = 11;
 
     public static Integer mainScreen() {
         StringBuilder menu = new StringBuilder();
@@ -24,12 +24,10 @@ public class EntradaSaida {
         menu.append("5: Receber pagamento\n");
         menu.append("6: Lista de computadores livres\n");
 		menu.append("7: Lista de computadores ocupados\n");
-        // menu.append("7: Fazer reserva\n");
-        // menu.append("8: Lista de reservas\n");
-        menu.append("9: Conferência de caixa\n");
-        menu.append("10: Lista de inadimplentes\n");
-        menu.append("11: Relatório de histórico de uso\n");
-        menu.append("12: Sair\n");
+        menu.append("8: Conferência de caixa\n");
+        menu.append("9: Lista de inadimplentes\n");
+        menu.append("10: Relatório de histórico de uso\n");
+        menu.append("11: Sair\n");
 
         return getNumber(menu.toString());
     }
@@ -50,18 +48,6 @@ public class EntradaSaida {
 		}
 	}
 
-	// public static Integer getPositiveNumber(String msg) {
-	// 	while(true) {
-	// 		try {
-	// 			Integer number = Integer.parseInt(JOptionPane.showInputDialog(msg));
-	// 			if (number <= 0) throw new Exception();
-	// 			return number;
-	// 		} catch (Exception e) {
-	// 			showMessage("Input invalido");
-	// 		}
-	// 	}
-	// }
-
     public static Boolean getBoolean(String msg) {
         return JOptionPane.showConfirmDialog(null, msg, "Question", 0) == 0;
     }
@@ -69,7 +55,6 @@ public class EntradaSaida {
 	public static Double getDouble(String msg) {
 		while(true) {
 			try {
-				// Double number = Double.parseDouble(JOptionPane.showInputDialog(msg));
 				return new DecimalFormat("#,##0.00").parse(JOptionPane.showInputDialog(msg)).doubleValue();
 			} catch (Exception e) {
 				showMessage("Input invalido");
@@ -80,7 +65,6 @@ public class EntradaSaida {
     public static Float getFloat(String msg) {
 		while(true) {
 			try {
-				// Float number = Float.parseFloat(JOptionPane.showInputDialog(msg));
 				return new DecimalFormat("#,##0.0").parse(JOptionPane.showInputDialog(msg)).floatValue();
 			} catch (Exception e) {
 				showMessage("Input invalido");
@@ -122,15 +106,6 @@ public class EntradaSaida {
 			}
 		}
 	}
-
-	// public static void listReserveds(Collection<Reserved> reserveds) {
-	// 	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-	// 	StringBuilder str = new StringBuilder("Reservas Agendadas\n");
-	// 	for (Reserved reserve : reserveds) {
-	// 		str.append("\nReserva para usuário ").append(reserve.getUserCpf()).append(" na data ").append(dateFormat.format(reserve.getReserveDate()));
-	// 	}
-	// 	showMessage(str.toString());
-	// }
 
 	public static void printCash(Cash cash) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
