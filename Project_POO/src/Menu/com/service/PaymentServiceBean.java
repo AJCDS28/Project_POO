@@ -59,7 +59,7 @@ public class PaymentServiceBean implements PaymentService {
     }
 
     private void increaseBalance(Double value) {
-        this.cash.setBalance(this.cash.getReceivable() + value);
+        this.cash.setBalance(this.cash.getBalance() + value);
         this.cash.setLastMovement(new Date());
     }
 
@@ -71,11 +71,11 @@ public class PaymentServiceBean implements PaymentService {
         this.cash.setReceivable(this.cash.getReceivable() - value);
     }
     public void printDefaulters() {
-    	if(defaulterMap.keySet().isEmpty()) {
-    		EntradaSaida.showMessage("Não há clientes inadimplentes");
-    	} else {
-    	EntradaSaida.listDefaulters(defaulterMap.values());
-    	}
+        if(defaulterMap.keySet().isEmpty()) {
+            EntradaSaida.showMessage("Não há clientes inadimplentes");
+        } else {
+            EntradaSaida.listDefaulters(defaulterMap.values());
+        }
     }
 
 }

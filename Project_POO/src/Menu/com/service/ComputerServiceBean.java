@@ -154,13 +154,12 @@ public class ComputerServiceBean implements ComputerService {
     private void attComputerUseHistory(Customer user, Boolean isPayed) {
         ComputerUseHistory computerUseHistory = null;
         for (ComputerUseHistory pc : computerUseHistoryMap.values()) {
-            if (!pc.isPayed() && pc.getUserCpf().equals(user.getCpf())) {
+            if (pc.getUserCpf().equals(user.getCpf())) {
                 computerUseHistory = pc;
-                computerUseHistory.setPayed(isPayed);
-                computerUseHistory.setFinishedDate(new Date());
-                break;
             }
         }
+        computerUseHistory.setPayed(isPayed);
+        computerUseHistory.setFinishedDate(new Date());
         this.addComputerUseHistory(computerUseHistory);
     }
 

@@ -118,19 +118,20 @@ public class EntradaSaida {
 
 		showMessage(str.toString());
 	}
-	
+
 	public static void listComputersUse(Collection<ComputerUseHistory> computerHistory) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		StringBuilder str = new StringBuilder("Historico de Uso dos Computadores\n\n");
         for (ComputerUseHistory compUse : computerHistory) {
-            str.append("Id do computador: ").append(compUse.getComputerId());
+            str.append("\nId do computador: ").append(compUse.getComputerId());
             str.append("\nCliente: ").append(compUse.getUserCpf());
             if(compUse.getFinishedDate()==null) {
-            	str.append("\nStatus: Cliente em sessão");
+				str.append("\nStatus: Cliente em sessão");
             }else {
-            	str.append("\nStatus: Encerrado em: ").append(compUse.getFinishedDate());
+				str.append("\nStatus: Encerrado em: ").append(dateFormat.format(compUse.getFinishedDate()));
             }
-            str.append("\nHora de inicio da sessão: ").append(compUse.getInitialTime());
-            str.append("\nHora de término da sessão: ").append(compUse.getEndTime());
+            str.append("\nHora de inicio da sessão: ").append(dateFormat.format(compUse.getInitialTime()));
+            str.append("\nHora de término da sessão: ").append(dateFormat.format(compUse.getEndTime()));
             str.append("\nSessão paga?: ").append( compUse.isPayed() ? "Sim\n" : "Não\n" );
         }
         showMessage(str.toString());
@@ -139,10 +140,9 @@ public class EntradaSaida {
 	public static void listDefaulters(Collection<Defaulter> defaulters) {
 		StringBuilder str = new StringBuilder("Clientes Inadimplentes\n");
         for (Defaulter df : defaulters) {
-            str.append("Cliente: ").append(df.getUserCpf());
+            str.append("\nCliente: ").append(df.getUserCpf());
             str.append(", Valor devido: R$").append(df.getAmountOwed()).append("\n");
         }
         showMessage(str.toString());
-		
 	}
 }
